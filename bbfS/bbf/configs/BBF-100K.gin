@@ -1,0 +1,60 @@
+# SPR (Schwarzer et al, 2021)
+import bbf.networks.spr_networks
+import bbf.agents.spr_agent
+import bbf.replay_memory.subsequence_replay_buffer
+
+# Historical values. Ignore.
+DQNAgent.gamma = 0.997
+DQNAgent.min_replay_history = 2000
+DQNAgent.update_period = 1
+DQNAgent.target_update_period = 1
+DQNAgent.optimizer = 'adam'
+
+BBFAgent.double_dqn = True
+BBFAgent.distributional = True
+BBFAgent.num_atoms = 51
+BBFAgent.update_horizon = 3
+BBFAgent.max_update_horizon = 10
+BBFAgent.min_gamma = 0.97
+BBFAgent.cycle_steps = 10_000
+BBFAgent.reset_every = 20_000 # Change if you change the replay ratio
+#BBFAgent.reset_every = 5_000 # Change if you change the replay ratio
+BBFAgent.shrink_perturb_keys = "encoder,transition_model"
+BBFAgent.shrink_factor = 0.5
+BBFAgent.perturb_factor = 0.5
+BBFAgent.no_resets_after = 100_000 # Need to change if training longer
+BBFAgent.replay_ratio = 64
+#BBFAgent.replay_ratio = 256 
+BBFAgent.batches_to_group = 2
+BBFAgent.batch_size = 32
+BBFAgent.spr_weight = 5
+BBFAgent.jumps = 5
+BBFAgent.data_augmentation = True
+BBFAgent.half_precision = False
+BBFAgent.network    = @bbf.networks.spr_networks.RainbowDQNNetwork
+BBFAgent.learning_rate = 0.0001
+BBFAgent.encoder_learning_rate = 0.0001
+BBFAgent.target_update_tau = 0.005
+BBFAgent.target_action_selection = True
+
+bbf.networks.spr_networks.RainbowDQNNetwork.renormalize = True
+bbf.networks.spr_networks.RainbowDQNNetwork.hidden_dim = 2048
+bbf.networks.spr_networks.RainbowDQNNetwork.width_scale = 4
+bbf.networks.spr_networks.ImpalaCNN.num_blocks = 2
+
+
+DataEfficientAtariRunner.game_name = 'Jamesbond'
+create_atari_environment.sticky_actions = False     # Atari 100K benchmark doesn't use sticky actions.
+AtariPreprocessing.terminal_on_life_loss = True
+Runner.num_iterations = 1
+Runner.training_steps = 100_000
+DataEfficientAtariRunner.num_eval_episodes = 100
+DataEfficientAtariRunner.num_eval_envs = 100
+DataEfficientAtariRunner.num_train_envs = 1
+DataEfficientAtariRunner.max_noops = 30
+Runner.max_steps_per_episode = 27000
+
+bbf.replay_memory.subsequence_replay_buffer.PrioritizedSubsequenceParallelEnvReplayBuffer.replay_capacity = 200000
+bbf.replay_memory.subsequence_replay_buffer.PrioritizedSubsequenceParallelEnvReplayBuffer.n_envs = 1
+bbf.replay_memory.subsequence_replay_buffer.SubsequenceParallelEnvReplayBuffer.replay_capacity = 10000
+bbf.replay_memory.subsequence_replay_buffer.SubsequenceParallelEnvReplayBuffer.n_envs = 1
