@@ -6,7 +6,7 @@ export LD_LIBRARY_PATH=$CUDA_HOME/lib64${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 export XLA_FLAGS=--xla_gpu_graph_level=0
 
 #for a in /sys/bus/pci/devices/*; do echo 0 | sudo tee -a $a/numa_node; done
-strings=("Breakout") # Qbert, Gopher, Breakout?
+strings=("Qbert") # Qbert, Gopher, Breakout?
 seed=27 
 for ((j=11;j<=20;j++));
 do
